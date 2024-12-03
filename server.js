@@ -22,7 +22,17 @@ app.set('views', path.join(__dirname, 'views'));
 // GET Route to render tasks
 app.get('/', (req, res) => {
     const tasks = db.prepare('SELECT * FROM tasks').all(); // Fetch all tasks
-    res.render('index', { title: 'Task Manager', tasks });
+
+    // Group tasks by category
+    const groupedTasks = tasks.reduce((acc, task) => {
+        if (!acc[task.category]) {
+            acc[task.category] = [];
+        }
+        acc[task.category].push(task.task);
+        return acc;
+    }, {});
+
+    res.render('index', { title: 'Study Planner with Pomodoro', groupedTasks });
 });
 
 // POST Route to add a new task

@@ -64,19 +64,21 @@
             <aside class="task-list">
                 <h2>Tasks by Category</h2>
                 
-                <!-- Render tasks dynamically with categories -->
-                <% tasks.forEach(task => { %>
+                <!-- Render grouped tasks dynamically -->
+                <% Object.keys(groupedTasks).forEach(category => { %>
                     <div class="category">
-                        <h3><%= task.category %></h3> <!-- Category Name -->
-                        <div class="task">
-                            <span><%= task.task %></span> <!-- Task Name -->
-                            <!-- Delete Task Form -->
-                            <form action="/delete-task" method="POST" style="display:inline;">
-                                <input type="hidden" name="category" value="<%= task.category %>">
-                                <input type="hidden" name="task" value="<%= task.task %>">
-                                <button type="submit">Delete</button>
-                            </form>
-                        </div>
+                        <h3><%= category %></h3> <!-- Category Name -->
+                        <% groupedTasks[category].forEach(task => { %>
+                            <div class="task">
+                                <span><%= task %></span> <!-- Task Name -->
+                                <!-- Delete Task Form -->
+                                <form action="/delete-task" method="POST" style="display:inline;">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="task" value="<%= task %>">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </div>
+                        <% }) %>
                     </div>
                 <% }) %>
             </aside>
