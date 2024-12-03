@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/styles/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://unpkg.com/phosphor-icons@2.0.0/dist/phosphor.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1><%= title %></h1>
+    </header>
+
+    <div class="container">
+
+        <!-- Pomodoro Container -->
+        <section class="pomodoro-timer">
+            <div class="btn-container">
+                <button id="pomodoroBtn" onclick="setPomodoroType(TIMER_TYPE_POMODORO);">Pomodoro</button>
+                <button id="shortBreakBtn" onclick="setPomodoroType(TIMER_TYPE_SHORT_BREAK);">Short Break</button>
+                <button id="longBreakBtn" onclick="setPomodoroType(TIMER_TYPE_LONG_BREAK);">Long Break</button>
+            </div>
+
+            <!-- Pomodoro Timer -->
+            <div class="container-body">
+                <div class="progress-bar" id="circularProgressBar">
+                    <div class="progress-bar-inner">
+                        <h2 class="progress-value" id="timerDisplay">25:00</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-footer">
+                <button class="start-btn" id="start-btn" onclick="startTimer();">Start</button>
+                <button class="stop-btn" id="stop-btn" onclick="stopTimer();">Stop</button>
+                <button class="reset-btn" id="reset-btn" onclick="resetTimer();">
+                    <i class="ph ph-arrow-line-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Task Section -->
+        <section class="tasks-section">
+            <!-- Add Task Form -->
+            <aside class="task-input-form">
+                <div class="form">
+                    <h2>Add Task</h2>
+                    <form action="/add-task" method="POST">
+                        <input type="text" name="category" placeholder="Category (e.g., Work, Personal)" required>
+                        <input type="text" name="task" placeholder="Task (e.g., Finish project report)" required>
+                        <button type="submit">Add Task</button>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Task List (Dynamically Rendered) -->
+            <aside class="task-list">
+                <h2>Tasks by Category</h2>
+                
+                <!-- Render grouped tasks dynamically -->
+                <% Object.keys(groupedTasks).forEach(category => { %>
+                    <div class="category">
+                        <h3><%= category %></h3> <!-- Category Name -->
+                        <% groupedTasks[category].forEach(task => { %>
+                            <div class="task">
+                                <span><%= task %></span> <!-- Task Name -->
+                                <!-- Delete Task Form -->
+                                <form action="/delete-task" method="POST" style="display:inline;">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="task" value="<%= task %>">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% }) %>
+            </aside>
+        </section>
+
+    </div>
+
+    <!-- Script -->
+    <script src="/scripts/main.js"></script>
+    <script src="/scripts/tasks.js"></script>
+</body>
+</html> 
